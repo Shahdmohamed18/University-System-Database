@@ -1,0 +1,7 @@
+Add only PHP and HTML files into this path
+C:\xampp\htdocs
+And don’t run System file
+but run this URL :
+http://localhost/university-system/system.html
+after running SQL and Apache on XAMPP
+Test the code, find logic errors, have FUN

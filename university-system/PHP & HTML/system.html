@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        .topbar {
+            background: linear-gradient(135deg, #8b0000, #000000);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topbar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b0000, #ff0000, #8b0000);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .main-nav {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .main-nav a {
+            margin: 0 5px;
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid #8b0000;
+            font-weight: 500;
+        }
+
+        .main-nav a:hover {
+            background: #8b0000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 0, 0, 0.4);
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .panel {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(90deg, #8b0000, #000000);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h2::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: #ff0000;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search, .delete, .add-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search input,
+        .delete input,
+        .add-form input,
+        .add-form select,
+        .add-form textarea {
+            padding: 12px 15px;
+            width: 100%;
+            background: #1a1a1a;
+            color: #f0f0f0;
+            border: 1px solid #333;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .search input:focus,
+        .delete input:focus,
+        .add-form input:focus,
+        .add-form select:focus,
+        .add-form textarea:focus {
+            outline: none;
+            border-color: #8b0000;
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.3);
+        }
+
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #8b0000, #a00000);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #a00000, #c00000);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #8b0000, #600000);
+        }
+
+        button.danger:hover {
+            background: linear-gradient(135deg, #a00000, #700000);
+        }
+
+        button.ghost {
+            background: transparent;
+            border: 1px solid #555;
+            color: #aaa;
+        }
+
+        button.ghost:hover {
+            background: #333;
+            color: #f0f0f0;
+        }
+
+        button.success {
+            background: linear-gradient(135deg, #006600, #008000);
+        }
+
+        button.success:hover {
+            background: linear-gradient(135deg, #008000, #00a000);
+        }
+
+        .card {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .row label {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            text-align: left;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #8b0000, #000000);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        table tr:nth-child(even) {
+            background: #222;
+        }
+
+        table tr:hover {
+            background: #2a2a2a;
+        }
+
+        details {
+            margin-bottom: 20px;
+        }
+
+        summary {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+
+        summary:hover {
+            background: linear-gradient(135deg, #333, #222);
+        }
+
+        details[open] summary {
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .edit-form {
+            display: none;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #8b0000;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search, .delete, .add-form {
+                min-width: 100%;
+            }
+            
+            .row {
+                flex-direction: column;
+            }
+            
+            .row label {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .main-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-nav a {
+                width: 80%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <h1>University Management System</h1>
+
+        <nav class="main-nav">
+            <a href="#students">Students</a>
+            <a href="#instructors">Instructors</a>
+            <a href="#courses">Courses</a>
+            <a href="#rooms">Rooms</a>
+            <a href="#schedule">Schedule</a>
+            <a href="#enrollments">Enrollments</a>
+            <a href="#majors">Majors</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- ===================== STUDENTS ===================== -->
+        <section id="students" class="panel">
+            <h2>Students</h2>
+
+            <div class="controls">
+                <form class="search" action="student.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by ID, Name, SSN..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="student.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="student_id" placeholder="Student ID to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Student</summary>
+
+                <form class="add-form" action="student.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>ID <input type="number" name="id" required /></label>
+                        <label>SSN <input type="number" name="ssn" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>First Name <input name="fname" required /></label>
+                        <label>Last Name <input name="lname" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Address <input name="address" /></label>
+                        <label>Sex
+                            <select name="sex">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>Date of Birth <input type="date" name="date_of_birth" /></label>
+                        <label>Level
+                            <select name="level">
+                                <option value="Freshman">Freshman</option>
+                                <option value="Sophomore">Sophomore</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>GPA <input type="number" step="0.01" min="0" max="4" name="gpa" /></label>
+                        <label>Major ID <input type="number" name="majorID" required /></label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Student</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>SSN</th>
+                            <th>Name</th>
+                            <th>Level</th>
+                            <th>GPA</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== INSTRUCTORS ===================== -->
+        <section id="instructors" class="panel">
+            <h2>Instructors</h2>
+
+            <div class="controls">
+                <form class="search" action="instructor.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by ID, Name, Title..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="instructor.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="instructor_id" placeholder="Instructor ID to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Instructor</summary>
+
+                <form class="add-form" action="instructor.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>ID <input type="number" name="id" required /></label>
+                        <label>SSN <input type="number" name="ssn" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>First Name <input name="fname" required /></label>
+                        <label>Last Name <input name="lname" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Address <input name="address" /></label>
+                        <label>Sex
+                            <select name="sex">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>Date of Birth <input type="date" name="date_of_birth" /></label>
+                        <label>Title
+                            <select name="title">
+                                <option value="Professor">Professor</option>
+                                <option value="Assoc. Prof">Assoc. Prof</option>
+                                <option value="Lecturer">Lecturer</option>
+                                <option value="Assistant">Assistant</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>Salary <input type="number" name="salary" /></label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Instructor</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Title</th>
+                            <th>Salary</th>
+                            <th>Address</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="instructorsTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== COURSES ===================== -->
+        <section id="courses" class="panel">
+            <h2>Courses</h2>
+
+            <div class="controls">
+                <form class="search" action="courses.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by Course Code, Name..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="courses.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="course_code" placeholder="Course Code to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Course</summary>
+
+                <form class="add-form" action="courses.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>Course Code <input name="course_code" required /></label>
+                        <label>Course Name <input name="course_name" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Credits
+                            <select name="credits">
+                                <option value="1">1 Credit</option>
+                                <option value="2">2 Credits</option>
+                                <option value="3" selected>3 Credits</option>
+                                <option value="4">4 Credits</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Course</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Credits</th>
+                            <th>Instructor</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== ROOMS ===================== -->
+        <section id="rooms" class="panel">
+            <h2>Rooms</h2>
+
+            <div class="controls">
+                <form class="search" action="rooms.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by Room Number, Type..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="rooms.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="room_number" placeholder="Room Number to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Room</summary>
+
+                <form class="add-form" action="rooms.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>Room Number <input type="number" name="room_number" required /></label>
+                        <label>Floor <input type="number" name="floor" /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Building <input type="number" name="building" required /></label>
+                        <label>Capacity <input type="number" name="capacity" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Room Type
+                            <select name="room_type">
+                                <option value="Lecture Hall">Lecture Hall</option>
+                                <option value="Lab">Lab</option>
+                                <option value="Classroom">Classroom</option>
+                                <option value="Seminar Room">Seminar Room</option>
+                                <option value="Auditorium">Auditorium</option>
+                                <option value="Office">Office</option>
+                                <option value="Studio">Studio</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Room</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Room Number</th>
+                            <th>Building</th>
+                            <th>Type</th>
+                            <th>Capacity</th>
+                            <th>Floor</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomsTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== SCHEDULE ===================== -->
+        <section id="schedule" class="panel">
+            <h2>Schedule</h2>
+
+            <div class="controls">
+                <form class="search" action="schedule.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by Course, Room, Instructor..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="schedule.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="schedule_id" placeholder="Schedule ID to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Schedule Entry</summary>
+
+                <form class="add-form" action="schedule.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>Schedule ID <input type="number" name="schedule_id" required /></label>
+                        <label>Room Number <input type="number" name="room_number" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Course Code <input name="course_code" required /></label>
+                        <label>Instructor ID <input type="number" name="instructor_id" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Day
+                            <select name="day" required>
+                                <option value="SUN">Sunday</option>
+                                <option value="MON">Monday</option>
+                                <option value="TUE">Tuesday</option>
+                                <option value="WED">Wednesday</option>
+                                <option value="THU">Thursday</option>
+                            </select>
+                        </label>
+                        <label>Time <input type="time" name="time" required /></label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Schedule</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Schedule ID</th>
+                            <th>Course</th>
+                            <th>Room</th>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Instructor</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== ENROLLMENTS ===================== -->
+        <section id="enrollments" class="panel">
+            <h2>Enrollments</h2>
+
+            <div class="controls">
+                <form class="search" action="enrollments.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by Student ID, Course Code..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="enrollments.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="enrollment_id" placeholder="Enrollment ID to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Enrollment</summary>
+
+                <form class="add-form" action="enrollments.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>Enrollment ID <input type="number" name="enrollment_id" required /></label>
+                        <label>Student ID <input type="number" name="student_id" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>Course Code <input name="course_code" required /></label>
+                        <label>Semester
+                            <select name="semester">
+                                <option value="Fall">Fall</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>Year <input type="number" name="year" min="2020" max="2030" value="2024" /></label>
+                        <label>Grade
+                            <select name="grade">
+                                <option value="">Not Graded</option>
+                                <option value="A">A</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B">B</option>
+                                <option value="B-">B-</option>
+                                <option value="C+">C+</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="F">F</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label>Status
+                            <select name="status" required>
+                                <option value="Enrolled">Enrolled</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Dropped">Dropped</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Enrollment</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Enrollment ID</th>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Semester</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enrollmentsTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===================== MAJORS ===================== -->
+        <section id="majors" class="panel">
+            <h2>Majors</h2>
+
+            <div class="controls">
+                <form class="search" action="majors.php" method="get">
+                    <input type="hidden" name="action" value="search" />
+                    <input type="search" name="q" placeholder="Search by Major Name, Dean..." />
+                    <button type="submit">Search</button>
+                </form>
+
+                <form class="delete" action="majors.php" method="post">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="text" name="major_id" placeholder="Major ID to delete" />
+                    <button class="danger" type="submit">Delete</button>
+                </form>
+            </div>
+
+            <details class="card">
+                <summary>Add New Major</summary>
+
+                <form class="add-form" action="majors.php" method="post">
+                    <input type="hidden" name="action" value="create" />
+
+                    <div class="row">
+                        <label>Major ID <input type="number" name="major_id" required /></label>
+                        <label>Major Name <input name="major_name" required /></label>
+                    </div>
+
+                    <div class="row">
+                        <label>SupervisroID<input type="number" name="SupervisroID" required /></label>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Add Major</button>
+                        <button type="reset" class="ghost">Reset</button>
+                    </div>
+                </form>
+            </details>
+
+            <div class="table-wrap card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Major ID</th>
+                            <th>Major Name</th>
+                            <th>SupervisroID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="majorsTable">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStudents();
+        loadInstructors();
+        loadCourses();
+        loadRooms();
+        loadSchedule();
+        loadEnrollments();
+        loadMajors();
+    });
+
+    function loadStudents() {
+        fetch('student.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#studentsTable');
+                tbody.innerHTML = '';
+                data.forEach(student => {
+                    const row = `<tr>
+                        <td>${student.id}</td>
+                        <td>${student.ssn}</td>
+                        <td>${student.fname} ${student.lname}</td>
+                        <td>${student.level}</td>
+                        <td>${student.gpa || 'N/A'}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editStudent(${student.id})">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteStudent(${student.id})">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    function loadInstructors() {
+        fetch('instructor.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#instructorsTable');
+                tbody.innerHTML = '';
+                data.forEach(instructor => {
+                    const row = `<tr>
+                        <td>${instructor.id}</td>
+                        <td>${instructor.fname} ${instructor.lname}</td>
+                        <td>${instructor.title || 'N/A'}</td>
+                        <td>${instructor.salary || 'N/A'}</td>
+                        <td>${instructor.address || 'N/A'}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editInstructor(${instructor.id})">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteInstructor(${instructor.id})">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    function loadCourses() {
+        fetch('courses.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#coursesTable');
+                tbody.innerHTML = '';
+                data.forEach(course => {
+                    const instructorName = course.fname && course.lname ? `${course.fname} ${course.lname}` : 'Not Assigned';
+                    const row = `<tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credits}</td>
+                        <td>${instructorName}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editCourse('${course.code}')">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteCourse('${course.code}')">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    function loadRooms() {
+        fetch('rooms.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#roomsTable');
+                tbody.innerHTML = '';
+                data.forEach(room => {
+                    const row = `<tr>
+                        <td>${room.num}</td>
+                        <td>${room.bulding}</td>
+                        <td>${room.Type}</td>
+                        <td>${room.capacity}</td>
+                        <td>${room.floor}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editRoom(${room.num})">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteRoom(${room.num})">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    function loadSchedule() {
+        fetch('schedule.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#scheduleTable');
+                tbody.innerHTML = '';
+                data.forEach(schedule => {
+                    const row = `<tr>
+                        <td>${schedule.scheduleID}</td>
+                        <td>${schedule.course_name}</td>
+                        <td>${schedule.room_number}</td>
+                        <td>${schedule.day}</td>
+                        <td>${schedule.time}</td>
+                        <td>${schedule.fname} ${schedule.lname}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editSchedule(${schedule.scheduleID})">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteSchedule(${schedule.scheduleID})">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+    function loadEnrollments() {
+        fetch('enrollments.php?ajax=1')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#enrollmentsTable');
+                tbody.innerHTML = '';
+                data.forEach(enrollment => {
+                    const row = `<tr>
+                        <td>${enrollment.id}</td>
+                        <td>${enrollment.fname} ${enrollment.lname}</td>
+                        <td>${enrollment.course_name}</td>
+                        <td>${enrollment.semester}</td>
+                        <td>${enrollment.grade || 'N/A'}</td>
+                        <td>${enrollment.status}</td>
+                        <td>
+                            <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editEnrollment(${enrollment.id})">Edit</button>
+                            <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteEnrollment(${enrollment.id})">Delete</button>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    }
+
+function loadMajors() {
+    fetch('majors.php?ajax=1')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#majorsTable');
+            tbody.innerHTML = '';
+            data.forEach(major => {
+                const row = `<tr>
+                    <td>${major.id}</td>
+                    <td>${major.name}</td>
+                    <td>${major.SupervisroID}</td>  <!-- Changed from dean_name -->
+                    <td>
+                        <button style="padding: 6px 12px; font-size: 0.85rem;" onclick="editMajor(${major.id})">Edit</button>
+                        <button class="danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="deleteMajor(${major.id})">Delete</button>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        });
+}
+
+    function deleteStudent(id) {
+        if (confirm('Are you sure you want to delete this student?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('student_id', id);
+            
+            fetch('student.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadStudents(); 
+            });
+        }
+    }
+
+    function deleteInstructor(id) {
+        if (confirm('Are you sure you want to delete this instructor?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('instructor_id', id);
+            
+            fetch('instructor.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadInstructors(); 
+            });
+        }
+    }
+
+    function deleteCourse(courseCode) {
+        if (confirm('Are you sure you want to delete this course?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('course_code', courseCode);
+            
+            fetch('courses.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadCourses(); 
+            });
+        }
+    }
+
+    function deleteRoom(roomNumber) {
+        if (confirm('Are you sure you want to delete this room?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('room_number', roomNumber);
+            
+            fetch('rooms.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadRooms(); 
+            });
+        }
+    }
+
+    function deleteSchedule(scheduleID) {
+        if (confirm('Are you sure you want to delete this schedule?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('schedule_id', scheduleID);
+            
+            fetch('schedule.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadSchedule(); 
+            });
+        }
+    }
+
+    function deleteEnrollment(enrollmentID) {
+        if (confirm('Are you sure you want to delete this enrollment?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('enrollment_id', enrollmentID);
+            
+            fetch('enrollments.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadEnrollments(); 
+            });
+        }
+    }
+
+    function deleteMajor(majorID) {
+        if (confirm('Are you sure you want to delete this major?')) {
+            const formData = new FormData();
+            formData.append('action', 'delete');
+            formData.append('major_id', majorID);
+            
+            fetch('majors.php', {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                loadMajors(); 
+            });
+        }
+    }
+
+function editStudent(id) {
+    fetch(`student.php?action=get&id=${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(student => {
+            if (student && Object.keys(student).length > 0) {
+                showEditForm('student', student);
+            } else {
+                alert('Student not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading student data');
+        });
+}
+
+function editInstructor(id) {
+    fetch(`instructor.php?action=get&id=${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(instructor => {
+            if (instructor && Object.keys(instructor).length > 0) {
+                showEditForm('instructor', instructor);
+            } else {
+                alert('Instructor not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading instructor data');
+        });
+}
+
+function editCourse(courseCode) {
+    fetch(`courses.php?action=get&code=${courseCode}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(course => {
+            if (course && Object.keys(course).length > 0) {
+                showEditForm('course', course);
+            } else {
+                alert('Course not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading course data');
+        });
+}
+
+function editRoom(roomNumber) {
+    fetch(`rooms.php?action=get&num=${roomNumber}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(room => {
+            if (room && Object.keys(room).length > 0) {
+                showEditForm('room', room);
+            } else {
+                alert('Room not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading room data');
+        });
+}
+
+function editSchedule(scheduleID) {
+    fetch(`schedule.php?action=get&id=${scheduleID}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(schedule => {
+            if (schedule && Object.keys(schedule).length > 0) {
+                showEditForm('schedule', schedule);
+            } else {
+                alert('Schedule not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading schedule data');
+        });
+}
+
+function editEnrollment(enrollmentID) {
+    fetch(`enrollments.php?action=get&id=${enrollmentID}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(enrollment => {
+            if (enrollment && Object.keys(enrollment).length > 0) {
+                showEditForm('enrollment', enrollment);
+            } else {
+                alert('Enrollment not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading enrollment data');
+        });
+}
+
+function editMajor(majorID) {
+    fetch(`majors.php?action=get&id=${majorID}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(major => {
+            if (major && Object.keys(major).length > 0) {
+                showEditForm('major', major);
+            } else {
+                alert('Major not found!');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading major data');
+        });
+}
+
+function showEditForm(type, data) {
+    let modal = document.getElementById('editModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'editModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
+        document.body.appendChild(modal);
+    }
+
+    let formHTML = generateEditForm(type, data);
+    
+    modal.innerHTML = `
+        <div style="background: #1a1a1a; padding: 30px; border-radius: 10px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <h3 style="margin-bottom: 20px; color: #fff;">Edit ${type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+            ${formHTML}
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button onclick="submitEdit('${type}')" class="success">Update</button>
+                <button onclick="closeEditModal()" class="ghost">Cancel</button>
+            </div>
+        </div>
+    `;
+}
+
+function generateEditForm(type, data) {
+    switch(type) {
+        case 'student':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id" value="${data.id}">
+                    <div class="row">
+                        <label>SSN <input type="number" name="ssn" value="${data.ssn}" required></label>
+                        <label>First Name <input name="fname" value="${data.fname}" required></label>
+                    </div>
+                    <div class="row">
+                        <label>Last Name <input name="lname" value="${data.lname}" required></label>
+                        <label>Address <input name="address" value="${data.address || ''}"></label>
+                    </div>
+                    <div class="row">
+                        <label>Sex
+                            <select name="sex">
+                                <option value="M" ${data.sex === 'M' ? 'selected' : ''}>Male</option>
+                                <option value="F" ${data.sex === 'F' ? 'selected' : ''}>Female</option>
+                            </select>
+                        </label>
+                        <label>Date of Birth <input type="date" name="date_of_birth" value="${data.dob || ''}"></label>
+                    </div>
+                    <div class="row">
+                        <label>Level
+                            <select name="level">
+                                <option value="Freshman" ${data.level === 'Freshman' ? 'selected' : ''}>Freshman</option>
+                                <option value="Sophomore" ${data.level === 'Sophomore' ? 'selected' : ''}>Sophomore</option>
+                                <option value="Junior" ${data.level === 'Junior' ? 'selected' : ''}>Junior</option>
+                                <option value="Senior" ${data.level === 'Senior' ? 'selected' : ''}>Senior</option>
+                            </select>
+                        </label>
+                        <label>GPA <input type="number" step="0.01" min="0" max="4" name="gpa" value="${data.gpa || ''}"></label>
+                    </div>
+                    <div class="row">
+                        <label>Major ID <input type="number" name="majorID" value="${data.majorID}" required></label>
+                    </div>
+                </form>
+            `;
+        
+        case 'instructor':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id" value="${data.id}">
+                    <div class="row">
+                        <label>SSN <input type="number" name="ssn" value="${data.ssn}" required></label>
+                        <label>First Name <input name="fname" value="${data.fname}" required></label>
+                    </div>
+                    <div class="row">
+                        <label>Last Name <input name="lname" value="${data.lname}" required></label>
+                        <label>Address <input name="address" value="${data.address || ''}"></label>
+                    </div>
+                    <div class="row">
+                        <label>Sex
+                            <select name="sex">
+                                <option value="M" ${data.sex === 'M' ? 'selected' : ''}>Male</option>
+                                <option value="F" ${data.sex === 'F' ? 'selected' : ''}>Female</option>
+                            </select>
+                        </label>
+                        <label>Date of Birth <input type="date" name="date_of_birth" value="${data.date_of_birth || ''}"></label>
+                    </div>
+                    <div class="row">
+                        <label>Title
+                            <select name="title">
+                                <option value="Professor" ${data.title === 'Professor' ? 'selected' : ''}>Professor</option>
+                                <option value="Assoc. Prof" ${data.title === 'Assoc. Prof' ? 'selected' : ''}>Assoc. Prof</option>
+                                <option value="Lecturer" ${data.title === 'Lecturer' ? 'selected' : ''}>Lecturer</option>
+                                <option value="Assistant" ${data.title === 'Assistant' ? 'selected' : ''}>Assistant</option>
+                            </select>
+                        </label>
+                        <label>Salary <input type="number" name="salary" value="${data.salary || ''}"></label>
+                    </div>
+                </form>
+            `;
+
+        case 'course':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="code" value="${data.code}">
+                    <div class="row">
+                        <label>Course Name <input name="name" value="${data.name}" required></label>
+                        <label>Credits
+                            <select name="credits">
+                                ${[1,2,3,4].map(credit => 
+                                    `<option value="${credit}" ${data.credits == credit ? 'selected' : ''}>${credit} Credit${credit > 1 ? 's' : ''}</option>`
+                                ).join('')}
+                            </select>
+                        </label>
+                    </div>
+                </form>
+            `;
+
+        case 'room':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="num" value="${data.num}">
+                    <div class="row">
+                        <label>Floor <input type="number" name="floor" value="${data.floor}"></label>
+                        <label>Building <input type="number" name="bulding" value="${data.bulding}" required></label>
+                    </div>
+                    <div class="row">
+                        <label>Capacity <input type="number" name="capacity" value="${data.capacity}" required></label>
+                        <label>Room Type
+                            <select name="Type">
+                                <option value="Lecture Hall" ${data.Type === 'Lecture Hall' ? 'selected' : ''}>Lecture Hall</option>
+                                <option value="Lab" ${data.Type === 'Lab' ? 'selected' : ''}>Lab</option>
+                                <option value="Classroom" ${data.Type === 'Classroom' ? 'selected' : ''}>Classroom</option>
+                                <option value="Seminar Room" ${data.Type === 'Seminar Room' ? 'selected' : ''}>Seminar Room</option>
+                                <option value="Auditorium" ${data.Type === 'Auditorium' ? 'selected' : ''}>Auditorium</option>
+                                <option value="Office" ${data.Type === 'Office' ? 'selected' : ''}>Office</option>
+                                <option value="Studio" ${data.Type === 'Studio' ? 'selected' : ''}>Studio</option>
+                            </select>
+                        </label>
+                    </div>
+                </form>
+            `;
+
+        case 'schedule':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="scheduleID" value="${data.scheduleID}">
+                    <div class="row">
+                        <label>Room Number <input type="number" name="roomNum" value="${data.roomNum}" required></label>
+                        <label>Course Code <input name="courseCode" value="${data.courseCode}" required></label>
+                    </div>
+                    <div class="row">
+                        <label>Instructor ID <input type="number" name="instID" value="${data.instID}" required></label>
+                        <label>Day
+                            <select name="day" required>
+                                <option value="SUN" ${data.day === 'SUN' ? 'selected' : ''}>Sunday</option>
+                                <option value="MON" ${data.day === 'MON' ? 'selected' : ''}>Monday</option>
+                                <option value="TUE" ${data.day === 'TUE' ? 'selected' : ''}>Tuesday</option>
+                                <option value="WED" ${data.day === 'WED' ? 'selected' : ''}>Wednesday</option>
+                                <option value="THU" ${data.day === 'THU' ? 'selected' : ''}>Thursday</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>Time <input type="time" name="time" value="${data.time}" required></label>
+                    </div>
+                </form>
+            `;
+
+        case 'enrollment':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id" value="${data.id}">
+                    <div class="row">
+                        <label>Student ID <input type="number" name="stdID" value="${data.stdID}" required></label>
+                        <label>Course Code <input name="courseCode" value="${data.courseCode}" required></label>
+                    </div>
+                    <div class="row">
+                        <label>Semester
+                            <select name="semester">
+                                <option value="Fall" ${data.semester === 'Fall' ? 'selected' : ''}>Fall</option>
+                                <option value="Spring" ${data.semester === 'Spring' ? 'selected' : ''}>Spring</option>
+                                <option value="Summer" ${data.semester === 'Summer' ? 'selected' : ''}>Summer</option>
+                            </select>
+                        </label>
+                        <label>Year <input type="number" name="year" value="${data.year}" min="2020" max="2030"></label>
+                    </div>
+                    <div class="row">
+                        <label>Grade
+                            <select name="grade">
+                                <option value="" ${!data.grade ? 'selected' : ''}>Not Graded</option>
+                                <option value="A" ${data.grade === 'A' ? 'selected' : ''}>A</option>
+                                <option value="A-" ${data.grade === 'A-' ? 'selected' : ''}>A-</option>
+                                <option value="B+" ${data.grade === 'B+' ? 'selected' : ''}>B+</option>
+                                <option value="B" ${data.grade === 'B' ? 'selected' : ''}>B</option>
+                                <option value="B-" ${data.grade === 'B-' ? 'selected' : ''}>B-</option>
+                                <option value="C+" ${data.grade === 'C+' ? 'selected' : ''}>C+</option>
+                                <option value="C" ${data.grade === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${data.grade === 'D' ? 'selected' : ''}>D</option>
+                                <option value="F" ${data.grade === 'F' ? 'selected' : ''}>F</option>
+                            </select>
+                        </label>
+                        <label>Status
+                            <select name="status" required>
+                                <option value="Enrolled" ${data.status === 'Enrolled' ? 'selected' : ''}>Enrolled</option>
+                                <option value="Completed" ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                <option value="Dropped" ${data.status === 'Dropped' ? 'selected' : ''}>Dropped</option>
+                            </select>
+                        </label>
+                    </div>
+                </form>
+            `;
+
+        case 'major':
+            return `
+                <form id="editForm">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id" value="${data.id}">
+                    <div class="row">
+                        <label>Major Name <input name="name" value="${data.name}" required></label>
+                        <label>Supervisor ID <input type="number" name="SupervisorID" value="${data.SupervisorID}" required></label>
+                    </div>
+                </form>
+            `;
+
+        default:
+            return '<p>Edit form not available for this type.</p>';
+    }
+}
+
+function submitEdit(type) {
+    const form = document.getElementById('editForm');
+    const formData = new FormData(form);
+    
+    let phpFile = '';
+    switch(type) {
+        case 'student': phpFile = 'student.php'; break;
+        case 'instructor': phpFile = 'instructor.php'; break;
+        case 'course': phpFile = 'courses.php'; break;
+        case 'room': phpFile = 'rooms.php'; break;
+        case 'schedule': phpFile = 'schedule.php'; break;
+        case 'enrollment': phpFile = 'enrollments.php'; break;
+        case 'major': phpFile = 'majors.php'; break;
+    }
+    
+    fetch(phpFile, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert(result);
+        closeEditModal();
+        switch(type) {
+            case 'student': loadStudents(); break;
+            case 'instructor': loadInstructors(); break;
+            case 'course': loadCourses(); break;
+            case 'room': loadRooms(); break;
+            case 'schedule': loadSchedule(); break;
+            case 'enrollment': loadEnrollments(); break;
+            case 'major': loadMajors(); break;
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error);
+    });
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+    </script>
+</body>
+</html>
